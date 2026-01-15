@@ -100,8 +100,6 @@ python -m http.server 5500
 
 
 ---
-
-```md
 ## 🧪 Key Features
 
 - Structured reporting of lost and found items
