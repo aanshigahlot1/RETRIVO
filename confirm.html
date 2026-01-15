@@ -18,10 +18,18 @@
 
 <div style="margin-top:60px;">
   <div class="card">
-    <h2>Confirm Item Recovery</h2>
-    <p id="statusText" class="empty">
-      Processing your confirmation…
-    </p>
+    <h2>Item Recovery Confirmed</h2>
+    <p id="statusText" class="empty">Processing confirmation…</p>
+
+    <!-- Finder contact details -->
+    <div id="contactBox" style="display:none; margin-top:25px;">
+      <h3 style="color:#2f6f4e; margin-bottom:10px;">
+        📞 Contact the Finder
+      </h3>
+      <p><strong>Name:</strong> <span id="finderName"></span></p>
+      <p><strong>Email:</strong> <span id="finderEmail"></span></p>
+      <p><strong>Phone:</strong> <span id="finderPhone"></span></p>
+    </div>
   </div>
 </div>
 
@@ -47,7 +55,9 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
+
   const statusText = document.getElementById("statusText");
+  const contactBox = document.getElementById("contactBox");
 
   async function processConfirmation() {
     const params = new URLSearchParams(window.location.search);
@@ -76,19 +86,26 @@
       const lostData = lostSnap.val();
       const foundData = foundSnap.val();
 
-      // Move record to history
+      // Save to history
       await push(ref(db, "historyItems"), {
         lost: lostData,
         found: foundData,
         resolvedAt: Date.now()
       });
 
-      // Remove from active lists
+      // Remove active records
       await remove(lostRef);
       await remove(foundRef);
 
+      // Show success + finder contact
       statusText.innerHTML =
-        "<span class='success'>✅ Item recovery confirmed successfully.<br>The listing has been archived.</span>";
+        "<span class='success'>✅ Recovery confirmed. You can now contact the person who found your item.</span>";
+
+      document.getElementById("finderName").innerText = foundData.personName;
+      document.getElementById("finderEmail").innerText = foundData.email;
+      document.getElementById("finderPhone").innerText = foundData.phone;
+
+      contactBox.style.display = "block";
 
     } catch (error) {
       console.error(error);
