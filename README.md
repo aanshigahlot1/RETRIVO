@@ -80,4 +80,56 @@ This ensures **trust, privacy, and controlled data sharing**.
 ---
 
 ## 📂 Project Structure
+RETRIVO/
+├── index.html # Home page
+├── lost.html # Report lost items
+├── found.html # Report found items
+├── items.html # Browse active lost & found items
+├── history.html # Recovered items history
+├── confirm.html # Recovery confirmation & contact sharing
+├── contact.html # Contact page (frontend-only)
+├── style.css # Global styling and UI theme
+└── README.md
+
+
+## 🌐 Open in Browser & Deployment
+### 🔹 Run Locally
+Start a local server:
+```bash
+python -m http.server 5500
+
+
+---
+
+```md
+## 🧪 Key Features
+
+- Structured reporting of lost and found items
+- Image upload support using Cloudinary
+- Smart matching based on item name and location
+- Email-based ownership verification
+- Privacy-aware contact sharing after confirmation
+- Automatic removal of recovered items from active listings
+- Recovery history archive for transparency
+- Calm, responsive, and user-friendly UI
+
+## 📈 Future Enhancements
+
+- AI-based image similarity matching for better accuracy
+- OTP or multi-factor verification for confirmations
+- Admin dashboard for moderation and analytics
+- Progressive Web App (PWA) support for mobile users
+- Migration to React.js for scalability and maintainability
+
+## 👩‍💻 Author
+
+**Aanshi Gahlot**  
+B.Tech Computer Science & Engineering  
+Self-initiated Full-Stack Web Project  
+
+GitHub: https://github.com/aanshigahlot1
+
+
+
+
 
