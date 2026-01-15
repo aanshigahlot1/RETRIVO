@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>RETRIVO | Report Found Item</title>
   <link rel="stylesheet" href="style.css">
 
@@ -21,6 +22,8 @@
       <a href="lost.html">Report Lost Item</a>
       <a href="found.html" class="active">Report Found Item</a>
       <a href="items.html">Browse Items</a>
+      <a href="history.html">History</a>
+
       <a href="contact.html">Contact Us</a>
     </nav>
   </div>
@@ -65,11 +68,10 @@
 </form>
 
 <script type="module">
-  // Firebase
+  /* ---------------- Firebase ---------------- */
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
   import { getDatabase, ref, push, get } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
 
-  // Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSyDiDOUE26n8nt9DVYtxRho73C14egX3kQM",
     authDomain: "retrivo-lost-and-found.firebaseapp.com",
@@ -83,10 +85,10 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  // EmailJS init
-  emailjs.init("4SAbTljPHoGzrgg_Z");
+  /* ---------------- EmailJS ---------------- */
+  emailjs.init("4SAbTljPHoGzrgg_Z"); // your public key
 
-  // Cloudinary upload
+  /* ---------------- Cloudinary Upload ---------------- */
   async function uploadToCloudinary(file) {
     const formData = new FormData();
     formData.append("file", file);
@@ -104,7 +106,7 @@
     return data.secure_url;
   }
 
-  // Submit handler
+  /* ---------------- Submit Handler ---------------- */
   document.getElementById("foundForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -115,10 +117,10 @@
     }
 
     try {
-      // 1️⃣ Upload image
+      /* 1️⃣ Upload image */
       const imageURL = await uploadToCloudinary(file);
 
-      // 2️⃣ Save found item
+      /* 2️⃣ Save found item */
       const foundRef = await push(ref(db, "foundItems"), {
         personName: personName.value,
         userType: userType.value,
@@ -132,8 +134,9 @@
         timestamp: Date.now()
       });
 
-      // 3️⃣ Match against lost items
+      /* 3️⃣ Match with lost items */
       const lostSnap = await get(ref(db, "lostItems"));
+
       if (lostSnap.exists()) {
         const lostItems = lostSnap.val();
 
@@ -145,9 +148,11 @@
             lost.location.toLowerCase() === foundLocation.value.trim().toLowerCase()
           ) {
             const confirmURL =
-              `https://YOUR_GITHUB_USERNAME.github.io/retrivo/confirm.html?lost=${lostId}&found=${foundRef.key}`;
+              "https://aanshigahlot1.github.io/RETRIVO/confirm.html" +
+              "?lost=" + lostId +
+              "&found=" + foundRef.key;
 
-            // 4️⃣ Send email
+            /* 4️⃣ Send confirmation email */
             emailjs.send("service_6gpd5bx", "template_hs1cwrk", {
               to_email: lost.email,
               lost_item: lost.itemName,
@@ -162,8 +167,8 @@
       alert("Found item submitted successfully!");
       foundForm.reset();
 
-    } catch (err) {
-      console.error(err);
+    } catch (error) {
+      console.error(error);
       alert("Something went wrong. Please try again.");
     }
   });

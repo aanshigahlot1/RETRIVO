@@ -2,52 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>RETRIVO | Confirmation</title>
-  <style>
-    body {
-      font-family: system-ui, Arial, sans-serif;
-      background: #f5f7f6;
-      padding: 60px 20px;
-      text-align: center;
-    }
-
-    .card {
-      max-width: 520px;
-      margin: auto;
-      background: #ffffff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-    }
-
-    h1 {
-      color: #2f6f4e;
-      margin-bottom: 12px;
-    }
-
-    p {
-      color: #555;
-      font-size: 15px;
-    }
-
-    .success {
-      color: #2e7d32;
-      font-weight: 600;
-      margin-top: 20px;
-    }
-
-    .error {
-      color: #c62828;
-      font-weight: 600;
-      margin-top: 20px;
-    }
-  </style>
+  <title>RETRIVO | Item Recovery Confirmation</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="card">
-  <h1>Confirm Item Recovery</h1>
-  <p id="statusText">Processing confirmation…</p>
+<header class="main-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-icon">🧭</span>
+      <span class="brand-text">RETRIVO</span>
+    </div>
+  </div>
+</header>
+
+<div style="margin-top:60px;">
+  <div class="card">
+    <h2>Confirm Item Recovery</h2>
+    <p id="statusText" class="empty">
+      Processing your confirmation…
+    </p>
+  </div>
 </div>
 
 <script type="module">
@@ -101,19 +76,19 @@
       const lostData = lostSnap.val();
       const foundData = foundSnap.val();
 
-      // Move to history
+      // Move record to history
       await push(ref(db, "historyItems"), {
         lost: lostData,
         found: foundData,
         resolvedAt: Date.now()
       });
 
-      // Remove active records
+      // Remove from active lists
       await remove(lostRef);
       await remove(foundRef);
 
       statusText.innerHTML =
-        "<span class='success'>✅ Confirmation successful. The item has been safely resolved.</span>";
+        "<span class='success'>✅ Item recovery confirmed successfully.<br>The listing has been archived.</span>";
 
     } catch (error) {
       console.error(error);

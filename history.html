@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RETRIVO | Recovery History</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-icon">🧭</span>
+      <span class="brand-text">RETRIVO</span>
+    </div>
+
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="lost.html">Report Lost Item</a>
+      <a href="found.html">Report Found Item</a>
+      <a href="items.html">Browse Items</a>
+      <a href="history.html" class="active">History</a>
+      <a href="contact.html">Contact Us</a>
+    </nav>
+  </div>
+</header>
+
+<h2>Recovered Items History</h2>
+<p class="empty" id="emptyText"></p>
+
+<table id="historyTable">
+  <tr>
+    <th>Item</th>
+    <th>Location</th>
+    <th>Lost By</th>
+    <th>Found By</th>
+    <th>Date Resolved</th>
+    <th>Image</th>
+  </tr>
+</table>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiDOUE26n8nt9DVYtxRho73C14egX3kQM",
+    authDomain: "retrivo-lost-and-found.firebaseapp.com",
+    databaseURL: "https://retrivo-lost-and-found-default-rtdb.firebaseio.com",
+    projectId: "retrivo-lost-and-found",
+    storageBucket: "retrivo-lost-and-found.appspot.com",
+    messagingSenderId: "694488366486",
+    appId: "1:694488366486:web:ae70da3e1e2b711cbe71b7"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  async function loadHistory() {
+    const snap = await get(ref(db, "historyItems"));
+    const table = document.getElementById("historyTable");
+    const empty = document.getElementById("emptyText");
+
+    if (!snap.exists()) {
+      empty.textContent = "No recovered items yet.";
+      return;
+    }
+
+    const data = snap.val();
+
+    Object.values(data).forEach(record => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${record.lost.itemName}</td>
+        <td>${record.lost.location}</td>
+        <td>${record.lost.personName}</td>
+        <td>${record.found.personName}</td>
+        <td>${new Date(record.resolvedAt).toLocaleDateString()}</td>
+        <td>
+          <img src="${record.lost.imageURL}" alt="item image" style="max-width:80px;border-radius:8px;">
+        </td>
+      `;
+      table.appendChild(row);
+    });
+  }
+
+  loadHistory();
+</script>
+
+</body>
+</html>
