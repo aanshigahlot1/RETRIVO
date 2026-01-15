@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RETRIVO | Contact Us</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .contact-wrapper {
+      max-width: 600px;
+      margin: 60px auto;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .contact-title {
+      font-size: 26px;
+      color: #2f6f4e;
+      margin-bottom: 10px;
+    }
+
+    .contact-subtext {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      text-align: left;
+    }
+
+    .contact-form label {
+      font-size: 14px;
+      color: #333;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      resize: none;
+    }
+
+    .contact-form textarea {
+      min-height: 100px;
+    }
+
+    .contact-form button {
+      margin-top: 10px;
+      padding: 12px;
+      background: #cfded5;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: not-allowed;
+      color: #555;
+    }
+
+    .contact-note {
+      margin-top: 18px;
+      font-size: 13px;
+      color: #777;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-icon">🧭</span>
+      <span class="brand-text">RETRIVO</span>
+    </div>
+
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="lost.html">Report Lost Item</a>
+      <a href="found.html">Report Found Item</a>
+      <a href="items.html">Browse Items</a>
+      <a href="contact.html" class="active">Contact Us</a>
+    </nav>
+  </div>
+</header>
+
+<div class="contact-wrapper">
+
+  <h2 class="contact-title">Get in touch</h2>
+
+  <p class="contact-subtext">
+    Have feedback, suggestions, or questions about RETRIVO?  
+    We’d love to hear from you.
+  </p>
+
+  <form class="contact-form">
+    <label>Your Name</label>
+    <input type="text" placeholder="Enter your name" disabled>
+
+    <label>Email</label>
+    <input type="email" placeholder="Enter your email" disabled>
+
+    <label>Message</label>
+    <textarea placeholder="Write your message here..." disabled></textarea>
+
+    <button type="button">
+      Submit (Coming Soon)
+    </button>
+  </form>
+
+  <p class="contact-note">
+    This feature is intentionally frontend-only at the moment.  
+    Backend integration will be added in a future phase to ensure privacy and security.
+  </p>
+
+</div>
+
+</body>
+</html>

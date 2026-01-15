@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>RETRIVO | Confirmation</title>
+  <style>
+    body {
+      font-family: system-ui, Arial, sans-serif;
+      background: #f5f7f6;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .card {
+      max-width: 520px;
+      margin: auto;
+      background: #ffffff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      color: #2f6f4e;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: #555;
+      font-size: 15px;
+    }
+
+    .success {
+      color: #2e7d32;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+
+    .error {
+      color: #c62828;
+      font-weight: 600;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <h1>Confirm Item Recovery</h1>
+  <p id="statusText">Processing confirmation…</p>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import {
+    getDatabase,
+    ref,
+    get,
+    remove,
+    push
+  } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiDOUE26n8nt9DVYtxRho73C14egX3kQM",
+    authDomain: "retrivo-lost-and-found.firebaseapp.com",
+    databaseURL: "https://retrivo-lost-and-found-default-rtdb.firebaseio.com",
+    projectId: "retrivo-lost-and-found",
+    storageBucket: "retrivo-lost-and-found.appspot.com",
+    messagingSenderId: "694488366486",
+    appId: "1:694488366486:web:ae70da3e1e2b711cbe71b7"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const statusText = document.getElementById("statusText");
+
+  async function processConfirmation() {
+    const params = new URLSearchParams(window.location.search);
+    const lostId = params.get("lost");
+    const foundId = params.get("found");
+
+    if (!lostId || !foundId) {
+      statusText.innerHTML =
+        "<span class='error'>Invalid or expired confirmation link.</span>";
+      return;
+    }
+
+    try {
+      const lostRef = ref(db, `lostItems/${lostId}`);
+      const foundRef = ref(db, `foundItems/${foundId}`);
+
+      const lostSnap = await get(lostRef);
+      const foundSnap = await get(foundRef);
+
+      if (!lostSnap.exists() || !foundSnap.exists()) {
+        statusText.innerHTML =
+          "<span class='error'>This item has already been resolved.</span>";
+        return;
+      }
+
+      const lostData = lostSnap.val();
+      const foundData = foundSnap.val();
+
+      // Move to history
+      await push(ref(db, "historyItems"), {
+        lost: lostData,
+        found: foundData,
+        resolvedAt: Date.now()
+      });
+
+      // Remove active records
+      await remove(lostRef);
+      await remove(foundRef);
+
+      statusText.innerHTML =
+        "<span class='success'>✅ Confirmation successful. The item has been safely resolved.</span>";
+
+    } catch (error) {
+      console.error(error);
+      statusText.innerHTML =
+        "<span class='error'>Something went wrong. Please try again later.</span>";
+    }
+  }
+
+  processConfirmation();
+</script>
+
+</body>
+</html>

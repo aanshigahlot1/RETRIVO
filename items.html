@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RETRIVO | Browse Items</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    h2 {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    table {
+      width: 95%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: #fff;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f4f4f4;
+    }
+
+    img {
+      max-width: 80px;
+      max-height: 80px;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+
+    .empty {
+      text-align: center;
+      color: #777;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-icon">🧭</span>
+      <span class="brand-text">RETRIVO</span>
+    </div>
+
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="lost.html">Report Lost Item</a>
+      <a href="found.html">Report Found Item</a>
+      <a href="items.html" class="active">Browse Items</a>
+      <a href="contact.html">Contact Us</a>
+    </nav>
+  </div>
+</header>
+
+<h2>Lost Items</h2>
+<div id="lostEmpty" class="empty"></div>
+<table id="lostTable">
+  <tr>
+    <th>Item</th>
+    <th>Date</th>
+    <th>Location</th>
+    <th>Description</th>
+    <th>Contact</th>
+    <th>Identity</th>
+    <th>Image</th>
+  </tr>
+</table>
+
+<h2>Found Items</h2>
+<div id="foundEmpty" class="empty"></div>
+<table id="foundTable">
+  <tr>
+    <th>Item</th>
+    <th>Date</th>
+    <th>Location</th>
+    <th>Description</th>
+    <th>Contact</th>
+    <th>Identity</th>
+    <th>Image</th>
+  </tr>
+</table>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiDOUE26n8nt9DVYtxRho73C14egX3kQM",
+    authDomain: "retrivo-lost-and-found.firebaseapp.com",
+    databaseURL: "https://retrivo-lost-and-found-default-rtdb.firebaseio.com",
+    projectId: "retrivo-lost-and-found",
+    storageBucket: "retrivo-lost-and-found.appspot.com",
+    messagingSenderId: "694488366486",
+    appId: "1:694488366486:web:ae70da3e1e2b711cbe71b7"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  async function loadItems(path, tableId, emptyId, dateField) {
+    const snapshot = await get(ref(db, path));
+    const table = document.getElementById(tableId);
+    const empty = document.getElementById(emptyId);
+
+    if (!snapshot.exists()) {
+      empty.textContent = "No items available.";
+      return;
+    }
+
+    const data = snapshot.val();
+
+    Object.values(data).forEach(item => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${item.itemName}</td>
+        <td>${item[dateField]}</td>
+        <td>${item.location}</td>
+        <td>${item.description || "-"}</td>
+        <td>${item.email}</td>
+        <td>${item.userType}</td>
+        <td>
+          ${item.imageURL ? `<img src="${item.imageURL}" />` : "-"}
+        </td>
+      `;
+      table.appendChild(row);
+    });
+  }
+
+  loadItems("lostItems", "lostTable", "lostEmpty", "lostDate");
+  loadItems("foundItems", "foundTable", "foundEmpty", "foundDate");
+</script>
+
+</body>
+</html>

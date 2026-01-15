@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RETRIVO | Report Lost Item</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="main-header">
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-icon">🧭</span>
+      <span class="brand-text">RETRIVO</span>
+    </div>
+
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="lost.html" class="active">Report Lost Item</a>
+      <a href="found.html">Report Found Item</a>
+      <a href="items.html">Browse Items</a>
+      <a href="contact.html">Contact Us</a>
+    </nav>
+  </div>
+</header>
+
+<form id="lostForm">
+
+  <label>Your Name</label>
+  <input id="personName" required>
+
+  <label>Identity Type</label>
+  <select id="userType" required>
+    <option>Student</option>
+    <option>Professor</option>
+    <option>Guard</option>
+    <option>Other Staff</option>
+  </select>
+
+  <label>Item Name</label>
+  <input id="itemName" required>
+
+  <label>Date Lost</label>
+  <input id="date" type="date" required>
+
+  <label>Location</label>
+  <input id="lostLocation" required>
+
+  <label>Description</label>
+  <textarea id="description"></textarea>
+
+  <label>Email</label>
+  <input id="email" type="email" required>
+
+  <label>Phone</label>
+  <input id="phone" required>
+
+  <label>Upload Image</label>
+  <input type="file" id="imageUpload" accept="image/*" required>
+
+  <button type="submit">Submit Lost Item</button>
+
+</form>
+
+<script type="module">
+  // Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDiDOUE26n8nt9DVYtxRho73C14egX3kQM",
+    authDomain: "retrivo-lost-and-found.firebaseapp.com",
+    databaseURL: "https://retrivo-lost-and-found-default-rtdb.firebaseio.com",
+    projectId: "retrivo-lost-and-found",
+    storageBucket: "retrivo-lost-and-found.appspot.com",
+    messagingSenderId: "694488366486",
+    appId: "1:694488366486:web:ae70da3e1e2b711cbe71b7"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Cloudinary upload
+  async function uploadToCloudinary(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "retrivo_unsigned");
+
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/dvuv944bh/image/upload",
+      {
+        method: "POST",
+        body: formData
+      }
+    );
+
+    const data = await response.json();
+    return data.secure_url;
+  }
+
+  // Form submit
+  document.getElementById("lostForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const file = imageUpload.files[0];
+    if (!file) {
+      alert("Please upload an image.");
+      return;
+    }
+
+    try {
+      const imageURL = await uploadToCloudinary(file);
+
+      await push(ref(db, "lostItems"), {
+        personName: personName.value,
+        userType: userType.value,
+        itemName: itemName.value.trim(),
+        lostDate: date.value,
+        location: lostLocation.value.trim(),
+        description: description.value,
+        email: email.value,
+        phone: phone.value,
+        imageURL: imageURL,
+        timestamp: Date.now()
+      });
+
+      alert("Lost item submitted successfully!");
+      lostForm.reset();
+
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong. Please try again.");
+    }
+  });
+</script>
+
+</body>
+</html>

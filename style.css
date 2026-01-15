@@ -1,0 +1,231 @@
+/* ========== Global Reset ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  background-color: #f4f7f5;
+  color: #2c2c2c;
+  line-height: 1.5;
+}
+
+/* ========== Header & Navigation ========== */
+.main-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e1e6e3;
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: auto;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  font-size: 22px;
+}
+
+.brand-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2f6f4e;
+  letter-spacing: 0.5px;
+}
+
+.main-nav a {
+  margin-left: 18px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #444;
+  padding-bottom: 4px;
+  transition: all 0.2s ease;
+}
+
+.main-nav a:hover {
+  color: #2f6f4e;
+}
+
+.main-nav a.active {
+  color: #2f6f4e;
+  border-bottom: 2px solid #2f6f4e;
+}
+
+/* ========== Forms ========== */
+form {
+  max-width: 520px;
+  margin: 60px auto;
+  background: #ffffff;
+  padding: 36px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+form label {
+  display: block;
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+  margin-top: 16px;
+}
+
+form input,
+form select,
+form textarea {
+  width: 100%;
+  padding: 11px 12px;
+  font-size: 14px;
+  border-radius: 10px;
+  border: 1px solid #d6ddd9;
+  background: #fbfcfb;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+form input:focus,
+form select:focus,
+form textarea:focus {
+  border-color: #2f6f4e;
+  background: #ffffff;
+}
+
+form textarea {
+  resize: none;
+  min-height: 90px;
+}
+
+form button {
+  width: 100%;
+  margin-top: 28px;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  background: #2f6f4e;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+form button:hover {
+  background: #285c41;
+  transform: translateY(-1px);
+}
+
+/* ========== Tables (Browse Items) ========== */
+table {
+  width: 95%;
+  margin: 30px auto;
+  border-collapse: collapse;
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+}
+
+th {
+  background: #e6efe9;
+  color: #2f6f4e;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px;
+}
+
+td {
+  padding: 12px;
+  font-size: 13px;
+  border-bottom: 1px solid #edf1ee;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+tr:hover {
+  background: #f7faf8;
+}
+
+img {
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* ========== Headings & Empty States ========== */
+h2 {
+  text-align: center;
+  font-size: 22px;
+  margin-top: 50px;
+  color: #2f6f4e;
+}
+
+.empty {
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+/* ========== Contact Page ========== */
+.contact-wrapper {
+  max-width: 600px;
+  margin: 70px auto;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+.contact-title {
+  text-align: center;
+  font-size: 26px;
+  color: #2f6f4e;
+  margin-bottom: 10px;
+}
+
+.contact-subtext {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.contact-note {
+  font-size: 13px;
+  color: #777;
+  margin-top: 18px;
+  text-align: center;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .main-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  form {
+    margin: 40px 16px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+}
